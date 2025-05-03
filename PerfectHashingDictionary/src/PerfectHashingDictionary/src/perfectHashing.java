@@ -1,4 +1,4 @@
-package PerfectHashingDictionary.src;
+package PerfectHashingDictionary.src.PerfectHashingDictionary.src;
 
 public interface perfectHashing<T> {
     public boolean insert(T key);

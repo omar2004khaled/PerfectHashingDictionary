@@ -1,6 +1,8 @@
-import PerfectHashingDictionary.src.NMethod;
-import PerfectHashingDictionary.src.NSquareMethod;
-import PerfectHashingDictionary.src.perfectHashing;
+package PerfectHashingDictionary.src;
+
+import PerfectHashingDictionary.src.PerfectHashingDictionary.src.NMethod;
+import PerfectHashingDictionary.src.PerfectHashingDictionary.src.NSquareMethod;
+import PerfectHashingDictionary.src.PerfectHashingDictionary.src.perfectHashing;
 import java.io.IOException;
 
 public class DictionaryImplementation {

@@ -1,4 +1,4 @@
-package PerfectHashingDictionary.src;
+package PerfectHashingDictionary.src.PerfectHashingDictionary.src;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

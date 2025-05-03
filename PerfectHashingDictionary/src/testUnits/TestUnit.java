@@ -1,4 +1,4 @@
-package testUnits;
+package PerfectHashingDictionary.src.testUnits;
 
 public class TestUnit {
 }
