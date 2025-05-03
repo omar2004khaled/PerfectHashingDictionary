@@ -29,7 +29,6 @@ public class NMethod<T> implements perfectHashing<T>  {
         AllElements.add(key);
         n++;
         secondLevelTables[index].insert(key);
-        //secondLevelHash(index, key, size + 1);
 
         return true;
     }
@@ -67,8 +66,11 @@ public class NMethod<T> implements perfectHashing<T>  {
 
     @Override
     public int getNumberOfRehashing() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNumberOfRehashing'");
+        int NumberOfRehashing=0;
+        for(NSquareMethod<T> table:secondLevelTables){
+            NumberOfRehashing +=table.getNumberOfRehashing();
+        }
+        return NumberOfRehashing;
     }
 
     public void firstLevelHashing(int size){
@@ -137,19 +139,6 @@ public class NMethod<T> implements perfectHashing<T>  {
             }
         }
         return result2;
-    }
-
-    private void secondLevelHash(int index,T key,int  size ){
-        NSquareMethod<T> nSquare = new NSquareMethod<>();
-        if (firstLevelTable[index] == null)
-            return;
-        if (firstLevelTable[index].contains(key))
-            return;
-        firstLevelTable[index].add(key);
-        for (T entry : firstLevelTable[index]) {
-            nSquare.insert(entry);
-        }
-        secondLevelTables[index] = nSquare;
     }
 
     private long convertStringToLong(String key){
