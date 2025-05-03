@@ -1,5 +1,3 @@
-package PerfectHashingDictionary.src;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -10,7 +8,7 @@ public class App {
     private static final String BLACK_BG = "\u001B[40m";
 
     private Scanner scanner;
-//    private DictionaryImplementation dictionary;
+    private DictionaryImplementation dictionary;
 
     public static void main(String[] args) {
         App app = new App();
@@ -32,7 +30,7 @@ public class App {
         String typeChoice = getValidChoice();
         String complexityType = typeChoice.equals("1") ? "O(n)" : "O(n^2)";
 
-//        dictionary = new DictionaryImplementation(complexityType);
+        dictionary = new DictionaryImplementation(complexityType);
     }
 
     private String getValidChoice() {
@@ -90,27 +88,28 @@ public class App {
 
     private void handleInsert() {
         System.out.print("Enter the string to insert >> ");
-
+        dictionary.insert(scanner.next());
     }
 
     private void handleDelete() {
         System.out.print("Enter the string to delete >> ");
-
+        dictionary.delete(scanner.next());
     }
 
     private void handleSearch() {
         System.out.print("Enter the string to search >> ");
-
+        boolean found = dictionary.search(scanner.next());
+        System.out.println(found ? "String found in dictionary" : "String not found in dictionary");
     }
 
     private void handleBatchInsert() {
         System.out.print("Enter the path of the file to insert >> ");
-
+        dictionary.batchInsert(scanner.next());
     }
 
     private void handleBatchDelete() {
         System.out.print("Enter the path of the file to delete >> ");
-
+        dictionary.batchDelete(scanner.next());
     }
 
     private void exitProgram() {
