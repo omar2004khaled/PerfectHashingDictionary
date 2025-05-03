@@ -5,7 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Random;
-import PerfectHashingDictionary.src.NSquareMethod;
 
 public class NMethod<T> implements perfectHashing<T>  {
     private ArrayList<T>[] firstLevelTable;
@@ -29,7 +28,8 @@ public class NMethod<T> implements perfectHashing<T>  {
             return false;
         AllElements.add(key);
         n++;
-        secondLevelHash(index, key, size + 1);
+        secondLevelTables[index].insert(key);
+        //secondLevelHash(index, key, size + 1);
 
         return true;
     }
@@ -74,7 +74,7 @@ public class NMethod<T> implements perfectHashing<T>  {
     public void firstLevelHashing(int size){
         firstLevelTable = new ArrayList[size ];
         secondLevelTables = new NSquareMethod[size];
-        universalMatrix = new int[(int) Math.floor(Math.log10(size) / Math.log10(2))][63];
+        universalMatrix = new int[(int) Math.floor(Math.log10(size) / Math.log10(2))][64];
         randomizeMatrix();
     }
 
@@ -140,7 +140,7 @@ public class NMethod<T> implements perfectHashing<T>  {
     }
 
     private void secondLevelHash(int index,T key,int  size ){
-        NSquareMethod<T> nSquare = new NSquareMethod<>(size);
+        NSquareMethod<T> nSquare = new NSquareMethod<>();
         if (firstLevelTable[index] == null)
             return;
         if (firstLevelTable[index].contains(key))
