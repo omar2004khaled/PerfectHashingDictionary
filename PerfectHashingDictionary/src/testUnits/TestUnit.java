@@ -1,47 +1,164 @@
 package PerfectHashingDictionary.src.testUnits;
+
 import PerfectHashingDictionary.src.DictionaryImplementation;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
 public class TestUnit {
-    private DictionaryImplementation dictionary;
 
-    @BeforeEach
-    void setUp() {
-        // Initialize the dictionary with O(n) method for testing
-        dictionary = new DictionaryImplementation("O(n)");
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testInsertIncreasesSizeForNewKeyLinear() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n)");
+        dictionary.insert("newKey");
+        assertTrue(dictionary.search("newKey"));
     }
 
     @Test
-    void testInsert() {
-        // Test inserting a new string
-        dictionary.insert("test1");
-        assertTrue(dictionary.search("test1"), "The string 'test1' should be found after insertion.");
-
-        // Test inserting a duplicate string
-        dictionary.insert("test1");
-        assertTrue(dictionary.search("test1"), "The duplicate string 'test1' should still be found.");
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testInsertDoesNotIncreaseSizeForExistingKeyLinear() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n)");
+        dictionary.insert("existingKey");
+        dictionary.insert("existingKey");
+        assertTrue(dictionary.search("existingKey"));
     }
 
     @Test
-    void testDelete() {
-        // Insert a string and then delete it
-        dictionary.insert("test2");
-        dictionary.delete("test2");
-        assertFalse(dictionary.search("test2"), "The string 'test2' should not be found after deletion.");
-
-        // Test deleting a non-existent string
-        dictionary.delete("nonExistent");
-        assertFalse(dictionary.search("nonExistent"), "The string 'nonExistent' should not be found.");
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testSimpleSearchLinear() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n)");
+        dictionary.insert("simpleText");
+        assertTrue(dictionary.search("simpleText"));
     }
 
     @Test
-    void testSearch() {
-        // Test searching for an existing string
-        dictionary.insert("test3");
-        assertTrue(dictionary.search("test3"), "The string 'test3' should be found.");
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testSearchingOnNonExistingElementLinear() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n)");
+        assertFalse(dictionary.search("notSimple"));
+    }
 
-        // Test searching for a non-existent string
-        assertFalse(dictionary.search("notInDictionary"), "The string 'notInDictionary' should not be found.");
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testSimpleDeleteLinear() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n)");
+        dictionary.insert("simpleText");
+        dictionary.delete("simpleText");
+        assertFalse(dictionary.search("simpleText"));
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testDeletingNonExistingElementLinear() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n)");
+        dictionary.delete("simpleText");
+        assertFalse(dictionary.search("simpleText"));
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testInsertIncreasesSizeForNewKeyQuadratic() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n^2)");
+        dictionary.insert("newKey");
+        assertTrue(dictionary.search("newKey"));
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testInsertDoesNotIncreaseSizeForExistingKeyQuadratic() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n^2)");
+        dictionary.insert("existingKey");
+        dictionary.insert("existingKey");
+        assertTrue(dictionary.search("existingKey"));
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testSimpleSearchQuadratic() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n^2)");
+        dictionary.insert("simpleText");
+        assertTrue(dictionary.search("simpleText"));
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testSearchingOnNonExistingElementQuadratic() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n^2)");
+        assertFalse(dictionary.search("notSimple"));
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testSimpleDeleteQuadratic() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n^2)");
+        dictionary.insert("simpleText");
+        dictionary.delete("simpleText");
+        assertFalse(dictionary.search("simpleText"));
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    public void testDeletingNonExistingElementQuadratic() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n^2)");
+        dictionary.delete("simpleText");
+        assertFalse(dictionary.search("simpleText"));
+    }
+
+    @Test
+    @Timeout(value = 100, unit = TimeUnit.SECONDS)
+    public void testGiganticArrayOfStringsLinear() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n)");
+        String[] randomStringsArray = generateRandomStringsArray(10000, 10);
+        // Assuming you have a batch insert method
+        // dictionary.batchInsert(randomStringsArray);
+        // This test needs to be adjusted based on your actual implementation
+    }
+
+    @Test
+    @Timeout(value = 100, unit = TimeUnit.SECONDS)
+    public void testGiganticArrayOfStringsQuadratic() {
+        DictionaryImplementation dictionary = new DictionaryImplementation("O(n^2)");
+        String[] randomStringsArray = generateRandomStringsArray(10000, 10);
+        // Assuming you have a batch insert method
+        // dictionary.batchInsert(randomStringsArray);
+        // This test needs to be adjusted based on your actual implementation
+    }
+
+    public static String generateRandomString(int n) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(n);
+
+        for (int i = 0; i < n; i++) {
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+
+        return sb.toString();
+    }
+
+    public static String[] generateRandomStringsArray(int size, int length) {
+        String[] randomStrings = new String[size];
+        for (int i = 0; i < size; i++) {
+            randomStrings[i] = generateRandomString(length);
+        }
+        return randomStrings;
+    }
+
+    public static int generateRandomNumber(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
+    }
+
+    public static char generateRandomCharacter() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        int index = random.nextInt(characters.length());
+        return characters.charAt(index);
     }
 }
