@@ -1,4 +1,4 @@
-package PerfectHashingDictionary.src;
+package PerfectHashingDictionary.src.PerfectHashingDictionary.src;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -12,25 +12,41 @@ public class NMethod<T> implements perfectHashing<T>  {
     private int[][] universalMatrix;
     private ArrayList<T> AllElements = new ArrayList<>();
     private int n;
+    private int hashSize;
+    private long NumberOfrehash=0;
     
     @Override
     public boolean insert(T key) {
         int index = computeFirstLevelHash(key);
+        if(n==hashSize){
+            NumberOfrehash =getNumberOfRehashing();
+            hashSize *=2;
+            rehash(hashSize);
+        }
         if (firstLevelTable[index] == null || firstLevelTable[index].isEmpty()) {
             firstLevelTable[index] = new ArrayList<>();
-            firstLevelTable[index].add(key);
-            AllElements.add(key);
-            n++;
-            return true;
+            
         }
-        int size = firstLevelTable[index].size();
+        firstLevelTable[index].add(key);
         if (AllElements.contains(key))
             return false;
         AllElements.add(key);
         n++;
-        secondLevelTables[index].insert(key);
-
+        if (secondLevelTables[index] == null) {
+            // Rebuild the entire second level table for this slot
+            rebuildSecondLevelTable(index);
+        }
+        else{
+            secondLevelTables[index].insert(key);
+        }
         return true;
+    }
+
+    private void rebuildSecondLevelTable(int index) {
+        secondLevelTables[index] = new NSquareMethod<>();
+        for (T element : firstLevelTable[index]) {
+            secondLevelTables[index].insert(element);
+        }
     }
 
     @Override
@@ -68,18 +84,30 @@ public class NMethod<T> implements perfectHashing<T>  {
     public int getNumberOfRehashing() {
         int NumberOfRehashing=0;
         for(NSquareMethod<T> table:secondLevelTables){
-            NumberOfRehashing +=table.getNumberOfRehashing();
+            if(table!=null)
+                NumberOfRehashing +=table.getNumberOfRehashing();
         }
+        NumberOfRehashing +=NumberOfrehash;
         return NumberOfRehashing;
     }
 
     public void firstLevelHashing(int size){
+        hashSize=size;
         firstLevelTable = new ArrayList[size ];
         secondLevelTables = new NSquareMethod[size];
+        for (int i = 0; i < size; i++) {
+            secondLevelTables[i] = new NSquareMethod<>();
+        }
         universalMatrix = new int[(int) Math.floor(Math.log10(size) / Math.log10(2))][64];
         randomizeMatrix();
     }
 
+    private void rehash(int size){
+        firstLevelHashing(size);
+        for(T element:AllElements){
+            insert(element);
+        }
+    }
 
     private void randomizeMatrix(){
         int row = universalMatrix.length;
