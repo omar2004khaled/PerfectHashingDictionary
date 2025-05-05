@@ -10,7 +10,6 @@ public class NMethod<T> implements perfectHashing<T>  {
     private ArrayList<T>[] firstLevelTable;
     private NSquareMethod<T>[] secondLevelTables;
     private int[][] universalMatrix;
-    private ArrayList<T> AllElements = new ArrayList<>();
     private int n;
     private int hashSize;
     private long NumberOfrehash=0;
@@ -33,7 +32,6 @@ public class NMethod<T> implements perfectHashing<T>  {
             secondLevelTables[index] = new NSquareMethod<>(); 
         }
         if (secondLevelTables[index].insert(key)){
-            AllElements.add(key);
             firstLevelTable[index].add(key);
             n++;
             return true;
@@ -63,15 +61,11 @@ public class NMethod<T> implements perfectHashing<T>  {
         if (secondLevelTables[index] != null) {
             firstLevelTable[index].remove(key);
             if (secondLevelTables[index].delete(key)) {
-                AllElements.remove(key);
                 n--;
                 return true;
             }
             return false;
         }
-        firstLevelTable[index].remove(key);
-        AllElements.remove(key);
-        n--;
         return true;
     }
 
@@ -114,13 +108,17 @@ public class NMethod<T> implements perfectHashing<T>  {
 
     private void rehash(int size){
         numberofNrehash ++;
-        ArrayList<T> oldElements = new ArrayList<>(AllElements);
-        AllElements.clear();
+        ArrayList<T>[] oldElemnts= firstLevelTable.clone();
         n = 0;
         firstLevelHashing(size);
-        for (T element : oldElements) {
-            insert(element);
+        for(ArrayList<T> oldElement:oldElemnts){
+            if(oldElement!=null){
+                for (T element : oldElement) {
+                    insert(element);
+                }
+            }
         }
+        
     }
 
     private void randomizeMatrix(){
