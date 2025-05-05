@@ -20,14 +20,22 @@ public class DictionaryImplementation {
     }
 
     public synchronized void insert(String toInsert) {
+
+        int beforeRehash = 0;
+        if (dictionary instanceof NSquareMethod) 
+           beforeRehash = ((NSquareMethod<String>) dictionary).getNumberOfRehashing();
+    
         boolean res = dictionary.insert(toInsert);
         if(res) {
             System.out.println("(" + toInsert + ")" + "\u001B[32m Successfully INSERTED ✅\u001B[0m");
-            if(dictionary instanceof NSquareMethod && ((NSquareMethod<String>) dictionary).getNumberOfRehashing() > 0) {
-                System.out.println("\u001B[33m Table Rehashed\u001B[0m");
+            if (dictionary instanceof NSquareMethod) {
+                int afterRehash = ((NSquareMethod<String>) dictionary).getNumberOfRehashing();
+                if (afterRehash > beforeRehash) {
+                    System.out.println("\u001B[33m Table Rehashed\u001B[0m");
+                }
             }
-//            System.out.println(dictionary.getNumberOfRehashing());
-//            dictionary.printTable();
+//         System.out.println(dictionary.getNumberOfRehashing());
+           //dictionary.printTable();
         } else {
             System.out.println("\u001B[33m Already Exist\u001B[0m ");
         }
@@ -36,17 +44,21 @@ public class DictionaryImplementation {
     public synchronized void delete(String toDelete) {
         if (dictionary.delete(toDelete)) {
             System.out.println("(" + toDelete + ")" + "\u001B[32m Successfully DELETED ✅\u001B[0m");
+            //dictionary.printTable();
         } else {
             System.out.println("(" + toDelete + ")" + "\u001B[31m Not found ❌\u001B[0m");
+            //dictionary.printTable();
         }
     }
 
     public boolean search(String toSearch) {
         if (dictionary.search(toSearch)) {
             System.out.println("\u001B[32m Found in dictionary ✅\u001B[0m");
+            //dictionary.printTable();
             return true;
         } else {
             System.out.println("\u001B[31m Not found in dictionary ❌\u001B[0m");
+            //dictionary.printTable();
             return false;
         }
     }
