@@ -1,8 +1,5 @@
 package PerfectHashingDictionary.src.PerfectHashingDictionary.src;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,7 +11,7 @@ public class NMethod<T> implements perfectHashing<T>  {
     private int hashSize;
     private long NumberOfrehash=0;
     private int  numberofNrehash=0;
-    
+    private long [] editedMatrix;
     @Override
     public boolean insert(T key) {
         if(n>=hashSize){
@@ -103,6 +100,7 @@ public class NMethod<T> implements perfectHashing<T>  {
         firstLevelTable = new ArrayList[size ];
         secondLevelTables = new NSquareMethod[size];
         universalMatrix = new int[(int) Math.floor(Math.log10(size) / Math.log10(2))][64];
+        editedMatrix =new  long[(int) Math.floor(Math.log10(size) / Math.log10(2))];
         randomizeMatrix();
     }
 
@@ -123,12 +121,9 @@ public class NMethod<T> implements perfectHashing<T>  {
 
     private void randomizeMatrix(){
         int row = universalMatrix.length;
-        int col = universalMatrix[0].length;
         Random random = new Random();
-        for(int i = 0 ; i < row ; ++i){
-            for(int j = 0 ; j < col ; ++j){
-                universalMatrix[i][j] = random.nextInt(2);
-            }
+        for(int i=0;i<row;i++){
+            editedMatrix[i] = Math.abs(random.nextLong());
         }
     }
 
@@ -138,8 +133,9 @@ public class NMethod<T> implements perfectHashing<T>  {
 
     private int computeFirstLevelHash(T key){
         long hashedKey = computeHash(key);
-        int[] binaryHashed = longToBinaryArray(hashedKey);
-        int i =multiplyBinaryVectorWithMatrix(binaryHashed);
+        //int[] binaryHashed = longToBinaryArray(hashedKey);
+        //int i =multiplyBinaryVectorWithMatrix(binaryHashed);
+        int i=multiplyWithMatrix(hashedKey);
         return i;
     }
 
@@ -151,15 +147,11 @@ public class NMethod<T> implements perfectHashing<T>  {
         return binary;
     }
 
-    public int  multiplyBinaryVectorWithMatrix(int[] vector) {
-        int rows = universalMatrix.length;
+    public int multiplyWithMatrix(long hashedKey){
+        int rows =editedMatrix.length;
         int[] result = new int[rows];
         for (int i = 0; i < rows; i++) {
-            int sum = 0;
-            for (int j = 0; j < 64; j++) {
-                sum += universalMatrix[i][j] * vector[j];
-            }
-        result[i] = sum % 2; // binary result
+            result[i]=Long.bitCount(hashedKey & editedMatrix[i]) % 2;
         }
         int result2 = 0;
         int length = rows;
@@ -169,18 +161,6 @@ public class NMethod<T> implements perfectHashing<T>  {
             }
         }
         return result2;
-    }
-
-    private long convertStringToLong(String key){
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(key.getBytes());
-            BigInteger bigInt = new BigInteger(1, hashBytes);
-            return bigInt.longValue();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return 0;
-        }
     }
 
     @Override

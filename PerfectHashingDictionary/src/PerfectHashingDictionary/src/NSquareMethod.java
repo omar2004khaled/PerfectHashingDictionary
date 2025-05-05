@@ -93,11 +93,9 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
 
     @Override
     public boolean insert(T key) {
-        if (search(key)) return false;
 
         if ((double) (m) / (n * n) >= LOAD_FACTOR) {
-            //n *= 2;  // Double n
-            n = (int) Math.ceil(Math.sqrt(2 * n * n));    //x2 resizing
+            n *= 2;  // Double n
             rehash();
         }
 
@@ -111,8 +109,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
             } else if (computeHash(table[index].get(0)) == computeHash(key)) {
                 return false; // same key
             } else {
-                //n *= 2;
-                n = (int) Math.ceil(Math.sqrt(2 * n * n));    //x2 resizing
+                n *= 2;
                 rehash();
             }
         }
