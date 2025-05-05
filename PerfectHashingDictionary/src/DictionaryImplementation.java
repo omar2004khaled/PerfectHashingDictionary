@@ -31,6 +31,9 @@ public class DictionaryImplementation {
         } else {
             System.out.println("\u001B[33m Already Exist\u001B[0m ");
         }
+//        System.out.println(dictionary.getSize());    help yaso 
+//
+
     }
 
     public synchronized void delete(String toDelete) {
@@ -91,6 +94,7 @@ public class DictionaryImplementation {
             if (rehashCount != 0) {
                 System.out.println("Table Rehashed: " + rehashCount + " time(s).");
             }
+            //        System.out.println(dictionary.getSize());    help yaso 
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
         }

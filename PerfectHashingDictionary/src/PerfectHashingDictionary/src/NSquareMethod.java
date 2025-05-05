@@ -212,6 +212,10 @@ public class NSquareMethod<T> implements perfectHashing<T> {
             System.out.println();
         }
     }
+    public long getN(){
+        return (long)n;
+    }
+
 }
 /*
  * package PerfectHashingDictionary.src.PerfectHashingDictionary.src;
