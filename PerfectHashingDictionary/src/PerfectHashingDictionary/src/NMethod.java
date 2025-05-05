@@ -162,12 +162,12 @@ public class NMethod<T> implements perfectHashing<T>  {
         }
         return result2;
     }
-
+    @Override
     public long getSize(){
         long finalSize=hashSize;
         for(int i=0;i<hashSize;i++){
             if(secondLevelTables[i]!=null){
-                int x=secondLevelTables[i].getN();
+                long x=secondLevelTables[i].getSize();
                 finalSize += (x*x);
             }
         }

@@ -28,6 +28,7 @@ public class DictionaryImplementation {
             }
 //            System.out.println(dictionary.getNumberOfRehashing());
 //            dictionary.printTable();
+        System.out.println("Current size: "+dictionary.getSize());
         } else {
             System.out.println("\u001B[33m Already Exist\u001B[0m ");
         }
@@ -94,7 +95,7 @@ public class DictionaryImplementation {
             if (rehashCount != 0) {
                 System.out.println("Table Rehashed: " + rehashCount + " time(s).");
             }
-            //        System.out.println(dictionary.getSize());    help yaso 
+            System.out.println("Current size: "+dictionary.getSize());
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
         }

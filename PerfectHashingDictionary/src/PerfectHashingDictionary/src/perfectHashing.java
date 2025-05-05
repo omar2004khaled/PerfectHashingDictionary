@@ -6,4 +6,5 @@ public interface perfectHashing<T> {
     public boolean delete(T key);
     public int getNumberOfRehashing();
     public void printTable();
+    public long getSize();
 }
