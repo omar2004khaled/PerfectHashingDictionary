@@ -67,9 +67,9 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
         return bits;
     }
 
-    private int hashIndex(T key) {
-        long keyLong = computeHash(key);
-        int[] keyBits = toBinary(keyLong, u);
+    private int hashIndex(long key) {
+        
+        int[] keyBits = toBinary(key, u);
         int[] result = new int[hashMatrix.length];
 
         for (int i = 0; i < hashMatrix.length; i++) {
@@ -93,23 +93,26 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
 
     @Override
     public boolean insert(T key) {
-
         if ((double) (m) / (n * n) >= LOAD_FACTOR) {
-            n *= 2;  // Double n
+            //n *= 2;  // Double n
+            n = (int) Math.ceil(Math.sqrt(2 * n * n));    //x2 resizing
             rehash();
         }
 
+        long keyLong = computeHash(key);
+
         while (true) {
-            int index = hashIndex(key);
+            int index = hashIndex(keyLong);
             if (table[index] == null) {
                 table[index] = new ArrayList<>();
                 table[index].add(key);
                 m++;
                 return true;
-            } else if (computeHash(table[index].get(0)) == computeHash(key)) {
+            } else if (computeHash(table[index].get(0)) == keyLong) {
                 return false; // same key
             } else {
-                n *= 2;
+                //n *= 2;
+                n = (int) Math.ceil(Math.sqrt(2 * n * n));    //x2 resizing
                 rehash();
             }
         }
@@ -134,7 +137,8 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
     
             for (T key : allKeys) {
                 if (key == null) continue;
-                int index = hashIndex(key);
+                long keyLong = computeHash(key);
+                int index = hashIndex(keyLong);
                 if (table[index] == null) {
                     table[index] = new ArrayList<>();
                     table[index].add(key);
@@ -148,13 +152,15 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
 
     @Override
     public boolean search(T key) {
-        int index = hashIndex(key);
+        long keyLong = computeHash(key);
+        int index = hashIndex(keyLong);
         return table[index] != null && computeHash(table[index].get(0)) == computeHash(key);
     }
 
     @Override
     public boolean delete(T key) {
-        int index = hashIndex(key);
+        long keyLong = computeHash(key);
+        int index = hashIndex(keyLong);
         if (table[index] != null && computeHash(table[index].get(0)) == computeHash(key)) {
             table[index] = null;
             m--;

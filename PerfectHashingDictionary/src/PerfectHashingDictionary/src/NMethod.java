@@ -15,10 +15,10 @@ public class NMethod<T> implements perfectHashing<T>  {
     @Override
     public boolean insert(T key) {
         if(n>=hashSize){
-            NumberOfrehash =getNumberOfRehashing();
+            NumberOfrehash = getNumberOfRehashing();
             hashSize *=2;
             rehash(hashSize);
-        }    
+        }
         int index = computeFirstLevelHash(key);
         
         if (firstLevelTable[index] == null || firstLevelTable[index].isEmpty()) {
@@ -42,7 +42,7 @@ public class NMethod<T> implements perfectHashing<T>  {
     @Override
     public boolean search(T key) {
         int index = computeFirstLevelHash(key);
-        if (firstLevelTable[index] == null || !firstLevelTable[index].contains(key))
+        if (firstLevelTable[index] == null )
             return false;
         if (secondLevelTables[index] != null) {
             return secondLevelTables[index].search(key);
