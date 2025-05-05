@@ -8,14 +8,15 @@ import java.util.Random;
 
 public class NSquareMethod<T> implements perfectHashing<T>  {
     private ArrayList<T>[] table;
-    private int n = 4; // initial expected size
+    private int n ; 
     private int m = 0; // current number of inserted elements
     private final int u = 63; // max length for key representation
     private int[][] hashMatrix;
     private int numberOfRehashing = 0;
+    double LOAD_FACTOR = 0.75;
 
-    @SuppressWarnings("unchecked")
     public NSquareMethod() {
+        n = 4;
         table = new ArrayList[n * n];
         generateNewMatrix();
     }
@@ -78,7 +79,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
             result[i] = sum % 2;
         }
 
-        return binaryToDecimal(result);
+        return binaryToDecimal(result);  //index in hashtable in decimal
     }
 
     private int binaryToDecimal(int[] bits) {
@@ -93,6 +94,11 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
     public boolean insert(T key) {
         if (search(key)) return false;
 
+        if ((double) (m) / (n * n) >= LOAD_FACTOR) {
+            n *= 2;  // Double n
+            rehash();
+        }
+
         while (true) {
             int index = hashIndex(key);
             if (table[index] == null) {
@@ -103,6 +109,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
             } else if (computeHash(table[index].get(0)) == computeHash(key)) {
                 return false; // same key
             } else {
+                n *= 2;
                 rehash();
             }
         }
@@ -116,15 +123,15 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
                 allKeys.addAll(slot);
             }
         }
-
+    
         allKeys.add(null); // reserve slot for the new key
-
+    
         boolean success;
         do {
             success = true;
             generateNewMatrix();
             table = new ArrayList[n * n];
-
+    
             for (T key : allKeys) {
                 if (key == null) continue;
                 int index = hashIndex(key);
@@ -161,6 +168,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
         return numberOfRehashing;
     }
 
+    @Override
     public void printTable() {
         for (int i = 0; i < table.length; i++) {
             System.out.print("Index " + i + ": ");

@@ -26,6 +26,8 @@ public class DictionaryImplementation {
             if(dictionary instanceof NSquareMethod && ((NSquareMethod<String>) dictionary).getNumberOfRehashing() > 0) {
                 System.out.println("\u001B[33m Table Rehashed\u001B[0m");
             }
+            //dictionary.printTable();
+            //System.out.println(dictionary.getNumberOfRehashing());
         } else {
             System.out.println("\u001B[33m Already Exist\u001B[0m ");
         }

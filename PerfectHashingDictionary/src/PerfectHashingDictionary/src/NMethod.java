@@ -180,4 +180,9 @@ public class NMethod<T> implements perfectHashing<T>  {
             return 0;
         }
     }
+
+    @Override
+    public void printTable() {
+        throw new UnsupportedOperationException("Unimplemented method 'printTable'");
+    }
 }
