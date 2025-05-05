@@ -109,6 +109,7 @@ public class DictionaryImplementation {
                 if (result) {
                     deletedCount++;
                 } else {
+                    System.out.println(line.trim());
                     failedCount++;
                 }
             }

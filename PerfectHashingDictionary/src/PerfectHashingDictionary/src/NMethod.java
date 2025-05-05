@@ -18,22 +18,24 @@ public class NMethod<T> implements perfectHashing<T>  {
     
     @Override
     public boolean insert(T key) {
-        int index = computeFirstLevelHash(key);
         if(n>=hashSize){
             NumberOfrehash =getNumberOfRehashing();
             hashSize *=2;
             rehash(hashSize);
-        }
+        }    
+        int index = computeFirstLevelHash(key);
+        
         if (firstLevelTable[index] == null || firstLevelTable[index].isEmpty()) {
             firstLevelTable[index] = new ArrayList<>();
         }
-        firstLevelTable[index].add(key);
-        n++;
+
         if (secondLevelTables[index] == null) {
-            secondLevelTables[index] = new NSquareMethod<>();
+            secondLevelTables[index] = new NSquareMethod<>(); 
         }
         if (secondLevelTables[index].insert(key)){
             AllElements.add(key);
+            firstLevelTable[index].add(key);
+            n++;
             return true;
         }
         else{
