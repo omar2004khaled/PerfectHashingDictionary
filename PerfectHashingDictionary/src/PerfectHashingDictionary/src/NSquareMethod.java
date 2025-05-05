@@ -93,7 +93,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
 
     @Override
     public boolean insert(T key) {
-        if (search(key)) return false;
+//        if (search(key)) return false;
 
         if ((double) (m) / (n * n) >= LOAD_FACTOR) {
             n *= 2;  // Double n
