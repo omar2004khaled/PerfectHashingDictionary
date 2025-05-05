@@ -71,7 +71,8 @@ public class TestUnit {
         testPerformanceForSize(100, "O(n)");
         testPerformanceForSize(1000, "O(n)");
         testPerformanceForSize(10000, "O(n)");
-
+        testPerformanceForSize(100000, "O(n)");
+        testPerformanceForSize(1000000, "O(n)");
     }
 
     // O(n^2) Tests

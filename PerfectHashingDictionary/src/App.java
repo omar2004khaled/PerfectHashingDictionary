@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class App {
     private static final String RESET = "\u001B[0m";
-    private static final String YELLOW = "\u001B[33m";
+    private static final String YELLOW = "\u001B[33m";   
     private static final String RED = "\u001B[31m";
     private static final String BLACK_BG = "\u001B[40m";
 
