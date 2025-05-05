@@ -16,7 +16,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
     double LOAD_FACTOR = 0.75;
 
     public NSquareMethod() {
-        n = 16;
+        n = 4;
         table = new ArrayList[n * n];
         generateNewMatrix();
     }
@@ -80,7 +80,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
             result[i] = sum % 2;
         }
 
-        return binaryToDecimal(result);  //index in hashtable in decimal
+        return binaryToDecimal(result) % (n*n);  //index in hashtable in decimal
     }
 
     private int binaryToDecimal(int[] bits) {
@@ -96,7 +96,8 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
         if (search(key)) return false;
 
         if ((double) (m) / (n * n) >= LOAD_FACTOR) {
-            n *= 2;  // Double n
+            //n *= 2;  // Double n
+            n = (int) Math.ceil(Math.sqrt(2 * n * n));    //x2 resizing
             rehash();
         }
 
@@ -110,7 +111,8 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
             } else if (computeHash(table[index].get(0)) == computeHash(key)) {
                 return false; // same key
             } else {
-                n *= 2;
+                //n *= 2;
+                n = (int) Math.ceil(Math.sqrt(2 * n * n));    //x2 resizing
                 rehash();
             }
         }
