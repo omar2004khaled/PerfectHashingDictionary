@@ -9,7 +9,6 @@ import java.util.Random;
 public class NSquareMethod<T> implements perfectHashing<T>  {
     private ArrayList<T>[] table;
     private int n ; 
-    private int tableSize;
     private int m = 0; // current number of inserted elements
     private final int u = 63; // max length for key representation
     private int[][] hashMatrix;
@@ -17,14 +16,13 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
     double LOAD_FACTOR = 0.75;
 
     public NSquareMethod() {
-        n = 4; // keep if needed for other purposes
-        tableSize = n * n; // initial size = 4^2
-        table = new ArrayList[tableSize];
+        n = 4;
+        table = new ArrayList[n * n];
         generateNewMatrix();
     }
 
     private void generateNewMatrix() {
-        int b = (int) Math.ceil(Math.log(tableSize) / Math.log(2));
+        int b = (int) Math.ceil(Math.log(n * n) / Math.log(2));
         hashMatrix = new int[b][u];
         Random rand = new Random();
         for (int i = 0; i < b; i++) {
@@ -97,7 +95,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
         if (search(key)) return false;
 
         if ((double) (m) / (n * n) >= LOAD_FACTOR) {
-            tableSize *= 2;  // Double n
+            n *= 2;  // Double n
             rehash();
         }
 
@@ -111,7 +109,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
             } else if (computeHash(table[index].get(0)) == computeHash(key)) {
                 return false; // same key
             } else {
-                tableSize *= 2;
+                n *= 2;
                 rehash();
             }
         }
@@ -132,7 +130,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
         do {
             success = true;
             generateNewMatrix();
-            table = new ArrayList[tableSize];
+            table = new ArrayList[n * n];
     
             for (T key : allKeys) {
                 if (key == null) continue;
