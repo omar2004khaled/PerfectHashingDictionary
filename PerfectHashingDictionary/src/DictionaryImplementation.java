@@ -74,6 +74,7 @@ public class DictionaryImplementation {
                     }
                 } else {
                     failedCount++;
+                    System.out.println(line.trim());
                 }
             }
             if(dictionary instanceof NMethod){

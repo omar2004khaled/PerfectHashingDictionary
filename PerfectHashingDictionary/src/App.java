@@ -106,11 +106,7 @@ public class App {
 
     private void handleBatchInsert() {
         System.out.print("Enter the path of the file to insert >> ");
-        long startTime = System.currentTimeMillis();
         dictionary.batchInsert(scanner.next());
-        long endTime = System.currentTimeMillis();
-        long duration = endTime - startTime; // in milliseconds
-        System.out.println("Method took " + duration + " ms");
     }
 
     private void handleBatchDelete() {

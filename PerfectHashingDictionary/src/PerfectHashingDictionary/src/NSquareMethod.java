@@ -33,7 +33,16 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
     }
 
     private long computeHash(T key) {
-        return (long) key.hashCode();
+        switch (key.getClass().getSimpleName()) {
+            case "String":
+                return convertStringToLong((String) key);
+            case "Integer":
+                return (Integer) key;
+            case "Character":
+                return (long) (Character) key;
+            default:
+                throw new IllegalArgumentException("Unsupported key type: " + key.getClass().getName());
+        }
     }
 
 

@@ -28,12 +28,17 @@ public class NMethod<T> implements perfectHashing<T>  {
             firstLevelTable[index] = new ArrayList<>();
         }
         firstLevelTable[index].add(key);
-        AllElements.add(key);
         n++;
         if (secondLevelTables[index] == null) {
             secondLevelTables[index] = new NSquareMethod<>();
         }
-        return  secondLevelTables[index].insert(key);
+        if (secondLevelTables[index].insert(key)){
+            AllElements.add(key);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
