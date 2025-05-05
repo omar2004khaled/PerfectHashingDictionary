@@ -14,40 +14,28 @@ public class NMethod<T> implements perfectHashing<T>  {
     private int n;
     private int hashSize;
     private long NumberOfrehash=0;
+    private int  numberofNrehash=0;
     
     @Override
     public boolean insert(T key) {
         int index = computeFirstLevelHash(key);
-        if(n==hashSize){
+        if(n>=hashSize){
             NumberOfrehash =getNumberOfRehashing();
             hashSize *=2;
             rehash(hashSize);
         }
         if (firstLevelTable[index] == null || firstLevelTable[index].isEmpty()) {
             firstLevelTable[index] = new ArrayList<>();
-            
         }
         firstLevelTable[index].add(key);
-        if (AllElements.contains(key))
-            return false;
         AllElements.add(key);
         n++;
         if (secondLevelTables[index] == null) {
-            // Rebuild the entire second level table for this slot
-            rebuildSecondLevelTable(index);
+            secondLevelTables[index] = new NSquareMethod<>();
         }
-        else{
-            secondLevelTables[index].insert(key);
-        }
-        return true;
+        return  secondLevelTables[index].insert(key);
     }
 
-    private void rebuildSecondLevelTable(int index) {
-        secondLevelTables[index] = new NSquareMethod<>();
-        for (T element : firstLevelTable[index]) {
-            secondLevelTables[index].insert(element);
-        }
-    }
 
     @Override
     public boolean search(T key) {
@@ -91,20 +79,39 @@ public class NMethod<T> implements perfectHashing<T>  {
         return NumberOfRehashing;
     }
 
+    public int getNrehash(){
+        return numberofNrehash;
+    }
+    
+    public int biggestUse(){
+        int maxssize=0;
+        int[] myarray =new int[11];
+        
+        for(ArrayList<T> ta:firstLevelTable){
+            if(ta!=null){
+                myarray[ta.size()]++;
+                if(maxssize<ta.size())maxssize=ta.size();
+            }
+            
+        }
+        for (int i=0;i<=10;i++) System.out.println(i+"get "+myarray[i]);
+        return maxssize;
+    }
     public void firstLevelHashing(int size){
         hashSize=size;
         firstLevelTable = new ArrayList[size ];
         secondLevelTables = new NSquareMethod[size];
-        for (int i = 0; i < size; i++) {
-            secondLevelTables[i] = new NSquareMethod<>();
-        }
         universalMatrix = new int[(int) Math.floor(Math.log10(size) / Math.log10(2))][64];
         randomizeMatrix();
     }
 
     private void rehash(int size){
+        numberofNrehash ++;
+        ArrayList<T> oldElements = new ArrayList<>(AllElements);
+        AllElements.clear();
+        n = 0;
         firstLevelHashing(size);
-        for(T element:AllElements){
+        for (T element : oldElements) {
             insert(element);
         }
     }
@@ -121,17 +128,7 @@ public class NMethod<T> implements perfectHashing<T>  {
     }
 
     private long computeHash(T key) {
-        // Hashing logic based on key type
-        switch (key.getClass().getSimpleName()) {
-            case "String" :
-                return convertStringToLong((String) key);
-            case "Integer" : 
-                return (Integer) key;
-            case "Character" :
-                return(long) (Character) key;
-            default : 
-                throw new IllegalArgumentException("Unsupported key type: " + key.getClass().getName());
-        }
+        return (long) key.hashCode();
     }
 
     private int computeFirstLevelHash(T key){
@@ -163,7 +160,7 @@ public class NMethod<T> implements perfectHashing<T>  {
         int length = rows;
         for (int i = 0; i < length; i++) {
             if (result[i] == 1) {
-                result2 |= 1L << (length - 1 - i);
+                result2 |= 1 << (length - 1 - i);
             }
         }
         return result2;

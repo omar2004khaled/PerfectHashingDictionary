@@ -11,7 +11,7 @@ public class DictionaryImplementation {
     public DictionaryImplementation(String typeD) {
         if (typeD.equals("O(n)")) {
             dictionary = new NMethod<>();
-            ((NMethod<String>) dictionary).firstLevelHashing(4); // Initialize with initial size
+            ((NMethod<String>) dictionary).firstLevelHashing(16); // Initialize with initial size
         } else if (typeD.equals("O(n^2)")) {
             dictionary = new NSquareMethod<>();
         } else {
@@ -76,10 +76,16 @@ public class DictionaryImplementation {
                     failedCount++;
                 }
             }
-            
+            if(dictionary instanceof NMethod){
+                NMethod<String> nsq = (NMethod<String>) dictionary;
+                if (nsq.getNumberOfRehashing() > rehashCount) {
+                    rehashCount = nsq.getNumberOfRehashing();
+                }
+            }
             System.out.println("Inserted successfully: " + insertedCount + " strings.");
             if (failedCount != 0) {
                 System.out.println("Failed to insert: " + failedCount + " strings.");
+                
             }
             if (rehashCount != 0) {
                 System.out.println("Table Rehashed: " + rehashCount + " time(s).");
