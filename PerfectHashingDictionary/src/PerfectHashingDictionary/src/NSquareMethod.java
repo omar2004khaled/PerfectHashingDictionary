@@ -17,7 +17,7 @@ public class NSquareMethod<T> implements perfectHashing<T> {
     double LOAD_FACTOR = 0.75;
 
     public NSquareMethod() {
-        n = 16;
+        n = 4;
         table = new ArrayList[n * n];
         randomizeMatrix();
     }
@@ -213,7 +213,7 @@ public class NSquareMethod<T> implements perfectHashing<T> {
         }
     }
     public long getSize(){
-        return (long)n;
+        return (long)(n*n);
     }
 
 }

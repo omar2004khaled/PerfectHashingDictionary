@@ -168,7 +168,7 @@ public class NMethod<T> implements perfectHashing<T>  {
         for(int i=0;i<hashSize;i++){
             if(secondLevelTables[i]!=null){
                 long x=secondLevelTables[i].getSize();
-                finalSize += (x*x);
+                finalSize += x;
             }
         }
         return finalSize;
