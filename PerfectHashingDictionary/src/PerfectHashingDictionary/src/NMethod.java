@@ -163,6 +163,17 @@ public class NMethod<T> implements perfectHashing<T>  {
         return result2;
     }
 
+    public long getSize(){
+        long finalSize=hashSize;
+        for(int i=0;i<hashSize;i++){
+            if(secondLevelTables[i]!=null){
+                int x=secondLevelTables[i].getN();
+                finalSize += (x*x);
+            }
+        }
+        return finalSize;
+    }
+
     @Override
     public void printTable() {
         throw new UnsupportedOperationException("Unimplemented method 'printTable'");

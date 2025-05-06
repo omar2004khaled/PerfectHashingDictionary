@@ -144,6 +144,10 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
         }
     }
 
+    public int getN(){
+        return n;
+    }
+
     private void rehash() {
         numberOfRehashing++;
         ArrayList<T> allKeys = new ArrayList<>();
