@@ -192,6 +192,9 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
         }
         return false;
     }
+    public int getN(){
+        return n;
+    }
 
     @Override
     public int getNumberOfRehashing() {

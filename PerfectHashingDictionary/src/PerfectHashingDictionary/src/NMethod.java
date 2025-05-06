@@ -151,6 +151,17 @@ public class NMethod<T> implements perfectHashing<T>  {
         return binary;
     }
 
+    public long getSize(){
+        long finalSize=hashSize;
+        for(int i=0;i<hashSize;i++){
+            if(secondLevelTables[i]!=null){
+                int x=secondLevelTables[i].getN();
+                finalSize += (x*x);
+            }
+        }
+        return finalSize;
+    }
+
     public int  multiplyBinaryVectorWithMatrix(int[] vector) {
         int rows = universalMatrix.length;
         int[] result = new int[rows];
