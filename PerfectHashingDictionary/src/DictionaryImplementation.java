@@ -20,20 +20,26 @@ public class DictionaryImplementation {
     }
 
     public synchronized void insert(String toInsert) {
+        int beforeRehash = 0;
+        if (dictionary instanceof NSquareMethod) 
+           beforeRehash = ((NSquareMethod<String>) dictionary).getNumberOfRehashing();
+    
         boolean res = dictionary.insert(toInsert);
         if(res) {
             System.out.println("(" + toInsert + ")" + "\u001B[32m Successfully INSERTED ✅\u001B[0m");
-            if(dictionary instanceof NSquareMethod && ((NSquareMethod<String>) dictionary).getNumberOfRehashing() > 0) {
-                System.out.println("\u001B[33m Table Rehashed\u001B[0m");
+            if (dictionary instanceof NSquareMethod) {
+                int afterRehash = ((NSquareMethod<String>) dictionary).getNumberOfRehashing();
+                if (afterRehash > beforeRehash) {
+                    System.out.println("\u001B[33m Table Rehashed\u001B[0m");
+                }
             }
-//            System.out.println(dictionary.getNumberOfRehashing());
-//            dictionary.printTable();
-        System.out.println("Current size: "+dictionary.getSize());
+//         System.out.println(dictionary.getNumberOfRehashing());
+           //dictionary.printTable();
         } else {
             System.out.println("\u001B[33m Already Exist\u001B[0m ");
         }
 //        System.out.println(dictionary.getSize());    help yaso 
-//
+
 
     }
 

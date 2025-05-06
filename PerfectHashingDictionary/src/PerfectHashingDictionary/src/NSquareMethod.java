@@ -212,6 +212,7 @@ public class NSquareMethod<T> implements perfectHashing<T> {
             System.out.println();
         }
     }
+    @Override
     public long getSize(){
         return (long)(n*n);
     }
