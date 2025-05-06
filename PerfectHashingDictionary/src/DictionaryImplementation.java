@@ -18,8 +18,9 @@ public class DictionaryImplementation {
             throw new IllegalArgumentException("Invalid dictionary type.");
         }
     }
-
     public synchronized void insert(String toInsert) {
+        long start = System.nanoTime();
+        // existing insert logic
         int beforeRehash = 0;
         if (dictionary instanceof NSquareMethod) 
            beforeRehash = ((NSquareMethod<String>) dictionary).getNumberOfRehashing();
@@ -33,38 +34,42 @@ public class DictionaryImplementation {
                     System.out.println("\u001B[33m Table Rehashed\u001B[0m");
                 }
             }
-//         System.out.println(dictionary.getNumberOfRehashing());
-           //dictionary.printTable();
         } else {
             System.out.println("\u001B[33m Already Exist\u001B[0m ");
         }
-//        System.out.println(dictionary.getSize());    help yaso 
-
-
+        long end = System.nanoTime();
+        System.out.println("Insert Time: " + (end - start) / 1_000_000.0 + " ms");
     }
-
+    
     public synchronized void delete(String toDelete) {
+        long start = System.nanoTime();
         if (dictionary.delete(toDelete)) {
             System.out.println("(" + toDelete + ")" + "\u001B[32m Successfully DELETED ✅\u001B[0m");
         } else {
             System.out.println("(" + toDelete + ")" + "\u001B[31m Not found ❌\u001B[0m");
         }
+        long end = System.nanoTime();
+        System.out.println("Delete Time: " + (end - start) / 1_000_000.0 + " ms");
     }
-
+    
     public boolean search(String toSearch) {
+        long start = System.nanoTime();
+        boolean result;
         if (dictionary.search(toSearch)) {
             System.out.println("\u001B[32m Found in dictionary ✅\u001B[0m");
-            return true;
+            result = true;
         } else {
             System.out.println("\u001B[31m Not found in dictionary ❌\u001B[0m");
-            return false;
+            result = false;
         }
+        long end = System.nanoTime();
+        System.out.println("Search Time: " + (end - start) / 1_000_000.0 + " ms");
+        return result;
     }
-
+    
     public void batchInsert(String fileToInsert) {
+        long start = System.nanoTime();
         try {
-            // For simplicity, we'll read the file and insert line by line
-            // In a real implementation, you might want to optimize this
             java.nio.file.Path path = java.nio.file.Paths.get(fileToInsert);
             java.util.List<String> lines = java.nio.file.Files.readAllLines(path);
             
@@ -96,18 +101,20 @@ public class DictionaryImplementation {
             System.out.println("Inserted successfully: " + insertedCount + " strings.");
             if (failedCount != 0) {
                 System.out.println("Failed to insert: " + failedCount + " strings.");
-                
             }
             if (rehashCount != 0) {
                 System.out.println("Table Rehashed: " + rehashCount + " time(s).");
             }
-            System.out.println("Current size: "+dictionary.getSize());
+            System.out.println("Current size: " + dictionary.getSize());
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
         }
+        long end = System.nanoTime();
+        System.out.println("Batch Insert Time: " + (end - start) / 1_000_000.0 + " ms");
     }
-
+    
     public void batchDelete(String fileToDelete) {
+        long start = System.nanoTime();
         try {
             java.nio.file.Path path = java.nio.file.Paths.get(fileToDelete);
             java.util.List<String> lines = java.nio.file.Files.readAllLines(path);
@@ -131,5 +138,8 @@ public class DictionaryImplementation {
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
         }
+        long end = System.nanoTime();
+        System.out.println("Batch Delete Time: " + (end - start) / 1_000_000.0 + " ms");
     }
+    
 }
