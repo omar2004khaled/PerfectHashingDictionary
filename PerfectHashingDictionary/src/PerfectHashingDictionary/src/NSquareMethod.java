@@ -8,17 +8,18 @@ import java.util.Random;
 
 public class NSquareMethod<T> implements perfectHashing<T>  {
     private ArrayList<T>[] table;
-    private int n ; 
+    private int n ;
     private int m = 0; // current number of inserted elements
     private final int u = 63; // max length for key representation
     private int[][] hashMatrix;
     private int numberOfRehashing = 0;
+    private long[] editedMatrix;
     double LOAD_FACTOR = 0.75;
 
     public NSquareMethod() {
         n = 16;
         table = new ArrayList[n * n];
-        generateNewMatrix();
+        randomizeMatrix();
     }
 
     private void generateNewMatrix() {
@@ -45,6 +46,30 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
         }
     }
 
+    private void randomizeMatrix(){
+        int row = (int) Math.floor(Math.log(n * n) / Math.log(2));
+        editedMatrix = new long[row];
+        Random random = new Random();
+        for(int i=0;i<row;i++){
+            editedMatrix[i] = Math.abs(random.nextLong());
+        }
+    }
+
+    public int multiplyWithMatrix(long hashedKey){
+        int rows =editedMatrix.length;
+        int[] result = new int[rows];
+        for (int i = 0; i < rows; i++) {
+            result[i]=Long.bitCount(hashedKey & editedMatrix[i]) % 2;
+        }
+        int result2 = 0;
+        int length = rows;
+        for (int i = 0; i < length; i++) {
+            if (result[i] == 1) {
+                result2 |= 1 << (length - 1 - i);
+            }
+        }
+        return result2;
+    }
 
     private long convertStringToLong(String key) {
         try {
@@ -68,6 +93,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
     }
 
     private int hashIndex(long  key) {
+        /* 
         int[] keyBits = toBinary(key, u);
         int[] result = new int[hashMatrix.length];
 
@@ -79,7 +105,8 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
             result[i] = sum % 2;
         }
 
-        return binaryToDecimal(result);  //index in hashtable in decimal
+        return binaryToDecimal(result);  //index in hashtable in decimal*/
+        return  multiplyWithMatrix(key);
     }
 
     private int binaryToDecimal(int[] bits) {
@@ -129,7 +156,7 @@ public class NSquareMethod<T> implements perfectHashing<T>  {
         boolean success;
         do {
             success = true;
-            generateNewMatrix();
+            randomizeMatrix();
             table = new ArrayList[n * n];
     
             for (T key : allKeys) {
